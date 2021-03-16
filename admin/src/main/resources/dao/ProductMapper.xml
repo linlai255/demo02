@@ -38,5 +38,8 @@
                 GROUP BY prod_id
             ) a
     </select>
-
+    <select id="getProductDetail" resultType="com.cll.admin.pojo.ProductDetail">
+        select prod_id , title , original_price , separate_price , group_price , sales from
+        t_product where prod_id = #{prodId}
+    </select>
 </mapper>

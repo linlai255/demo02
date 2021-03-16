@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cll.admin.mapper.ProductSkuDao">
+  <select id="skuDetail" resultType="com.cll.admin.pojo.SkuDetail">
+      select sku_id , pic_url , original_price , separate_price , group_price , spec_values , stock
+      from t_product_sku where prod_id = #{prodId}
+  </select>
+
+</mapper>

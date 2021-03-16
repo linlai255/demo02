@@ -2,12 +2,12 @@ package com.cll.admin.services.impl;
 
 import com.cll.admin.mapper.ProductCategoryDao;
 import com.cll.admin.mapper.ProductDao;
-import com.cll.admin.pojo.MySku;
-import com.cll.admin.pojo.Page;
-import com.cll.admin.pojo.ProductAndCategory;
+import com.cll.admin.mapper.ProductSkuDao;
+import com.cll.admin.pojo.*;
 import com.cll.admin.services.TProductService;
 import com.cll.admin.utils.MyTOProductUtil;
 import com.cll.admin.vo.AddProduct;
+import com.cll.admin.vo.VoProductDetail;
 import com.cll.mbg.mapper.TProductCategoryMapper;
 import com.cll.mbg.mapper.TProductImgMapper;
 import com.cll.mbg.mapper.TProductMapper;
@@ -35,6 +35,8 @@ public class TProductServiceImpl implements TProductService {
     TProductImgMapper tProductImgMapper;
     @Autowired
     TProductSkuMapper tProductSkuMapper;
+    @Autowired
+    ProductSkuDao productSkuDao;
     @Override
     public Page search(String title, Integer cateId, Integer racking, Integer pageNum, Integer pageSize) {
         Page page = new Page();
@@ -61,9 +63,17 @@ public class TProductServiceImpl implements TProductService {
     }
 
     @Override
-    public TProduct productDerail(int prodId) {
-
-        return null;
+    public VoProductDetail productDerail(Integer prodId) {
+        ProductDetail productDetail = productDao.getProductDetail(prodId);
+        TProductImgExample example = new TProductImgExample();
+        example.createCriteria().andProdIdEqualTo(prodId).andIsDeleteEqualTo(0);
+        List<TProductImg> imgs = tProductImgMapper.selectByExample(example);
+        List<SkuDetail> skuDetails = productSkuDao.skuDetail(prodId);
+        VoProductDetail voProductDetail = new VoProductDetail();
+        voProductDetail.setProductDetail(productDetail);
+        voProductDetail.setImgs(imgs);
+        voProductDetail.setSkuDetail(skuDetails);
+        return voProductDetail;
     }
 
     @Override

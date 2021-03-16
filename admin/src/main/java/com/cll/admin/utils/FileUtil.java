@@ -32,27 +32,18 @@ public class FileUtil {
      * @throws IOException IOException
      */
     public static String upload(MultipartFile file) throws IOException {
-        String originalFilename = file.getOriginalFilename();
-        String savePath = BASE_DIR + FIRST_LEVEL_DIR + SEPARATOR ;
-        String fileSavePath = savePath + originalFilename;
-        File originFile = new File(fileSavePath);
+        String secondLPath =String.valueOf(System.currentTimeMillis());
+        String originalFilename = secondLPath+file.getOriginalFilename();
+        String savePath = BASE_DIR + FIRST_LEVEL_DIR + SEPARATOR;
+        String resultPath = savePath + originalFilename;
+        File originFile = new File(resultPath);
         if (!originFile.getParentFile().exists()) {
             originFile.getParentFile().mkdirs();
         }
-        file.transferTo(originFile);
-        return fileSavePath;
+       file.transferTo(originFile);
+
+        return resultPath;
     }
 
-    /**
-     * 文件删除
-     *
-     * @param url  url
-     * @param path path
-     * @return code
-     */
-    public static boolean delete(String url, String path) {
-        //TODO 文件删除
-        return false;
-    }
 
 }

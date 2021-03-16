@@ -2,6 +2,7 @@ package com.cll.admin.services;
 
 import com.cll.admin.pojo.Page;
 import com.cll.admin.vo.AddProduct;
+import com.cll.admin.vo.VoProductDetail;
 import com.cll.mbg.model.TProduct;
 import com.cll.mbg.model.TProductCategory;
 
@@ -12,7 +13,7 @@ public interface TProductService {
 
     Page search(String title, Integer cateId, Integer racking, Integer pageNum, Integer pageSize);
 
-    TProduct productDerail(int prodId);
+    VoProductDetail productDerail(Integer prodId);
 
     Integer deleteProduct(int prodId);
 

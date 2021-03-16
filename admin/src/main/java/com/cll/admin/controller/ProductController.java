@@ -6,6 +6,7 @@ import com.cll.admin.pojo.Page;
 import com.cll.admin.services.TProductService;
 import com.cll.admin.vo.AddProduct;
 import com.cll.admin.vo.Lists;
+import com.cll.admin.vo.VoProductDetail;
 import com.cll.common.CommonResult;
 import com.cll.mbg.model.*;
 import io.swagger.annotations.Api;
@@ -28,7 +29,7 @@ public class ProductController {
     @RequestMapping(value = "/addProduct",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "添加商品", notes = "标题->title, 销量->sales, 主图->mainPic, 原价->originalPrice, 单独购买价格->separatePrice, " +
-            "拼团价格->groupPrice, \n" +
+            "拼团价格->groupPrice, " +
             "            是否上架：0-不上架 1-上架->racking, 分类外键->cateId, 商品服务，\n" +
             "            引用t_service中的serv_id，中间以逗号隔开->services, 详情->detail")
     public CommonResult addProduct(@RequestBody AddProduct addProduct,
@@ -62,14 +63,14 @@ public class ProductController {
 
     /**
      * 获取商品 详情
-     * @param prodId
+     * @param
      * @return
      */
     @RequestMapping(value = "/productDerail" , method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "商品详情")
-    public CommonResult<TProduct> ProductDerail(@ApiParam(name = "商品id") @RequestParam (defaultValue = "", required=true)int prodId){
-        TProduct product = tProductService.productDerail(prodId);
+    public CommonResult<VoProductDetail> ProductDerail(@RequestParam (required=true)Integer id){
+        VoProductDetail product = tProductService.productDerail(id);
         if (product != null){
             return CommonResult.success("执行成功",product);
         }
@@ -84,7 +85,7 @@ public class ProductController {
     @RequestMapping(value = "/deleteProduct" , method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "删除商品")
-    public CommonResult deleteProduct(@ApiParam(name = "商品id") @RequestParam (defaultValue = "", required = true)int prodId){
+    public CommonResult deleteProduct(@ApiParam(name = "商品id" ,value = "prodId") @RequestParam (defaultValue = "", required = true)int prodId){
         Integer flag = tProductService.deleteProduct(prodId);
         if (flag == 0){
             return CommonResult.failed("商品获取失败");
