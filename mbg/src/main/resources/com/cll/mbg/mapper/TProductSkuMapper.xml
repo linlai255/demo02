@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cll.mbg.mapper.TProductSkuMapper">
+  <resultMap id="BaseResultMap" type="com.cll.mbg.model.TProductSku">
+    <id column="sku_id" jdbcType="INTEGER" property="skuId" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="prod_id" jdbcType="INTEGER" property="prodId" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="separate_price" jdbcType="DECIMAL" property="separatePrice" />
+    <result column="group_price" jdbcType="DECIMAL" property="groupPrice" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="low_stock" jdbcType="INTEGER" property="lowStock" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.cll.mbg.model.TProductSku">
+    <result column="spec_values" jdbcType="LONGVARCHAR" property="specValues" />
+    <result column="param_values" jdbcType="LONGVARCHAR" property="paramValues" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    sku_id, sku_code, prod_id, pic_url, original_price, separate_price, group_price, 
+    stock, low_stock, sales
+  </sql>
+  <sql id="Blob_Column_List">
+    spec_values, param_values
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.cll.mbg.model.TProductSkuExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.cll.mbg.model.TProductSkuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_product_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product_sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_product_sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cll.mbg.model.TProductSkuExample">
+    delete from t_product_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cll.mbg.model.TProductSku">
+    insert into t_product_sku (sku_id, sku_code, prod_id, 
+      pic_url, original_price, separate_price, 
+      group_price, stock, low_stock, 
+      sales, spec_values, param_values
+      )
+    values (#{skuId,jdbcType=INTEGER}, #{skuCode,jdbcType=VARCHAR}, #{prodId,jdbcType=INTEGER}, 
+      #{picUrl,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL}, #{separatePrice,jdbcType=DECIMAL}, 
+      #{groupPrice,jdbcType=DECIMAL}, #{stock,jdbcType=INTEGER}, #{lowStock,jdbcType=INTEGER}, 
+      #{sales,jdbcType=INTEGER}, #{specValues,jdbcType=LONGVARCHAR}, #{paramValues,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cll.mbg.model.TProductSku">
+    insert into t_product_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="prodId != null">
+        prod_id,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="originalPrice != null">
+        original_price,
+      </if>
+      <if test="separatePrice != null">
+        separate_price,
+      </if>
+      <if test="groupPrice != null">
+        group_price,
+      </if>
+      <if test="stock != null">
+        stock,
+      </if>
+      <if test="lowStock != null">
+        low_stock,
+      </if>
+      <if test="sales != null">
+        sales,
+      </if>
+      <if test="specValues != null">
+        spec_values,
+      </if>
+      <if test="paramValues != null">
+        param_values,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="skuId != null">
+        #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null">
+        #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="separatePrice != null">
+        #{separatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="groupPrice != null">
+        #{groupPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null">
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="lowStock != null">
+        #{lowStock,jdbcType=INTEGER},
+      </if>
+      <if test="sales != null">
+        #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="specValues != null">
+        #{specValues,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="paramValues != null">
+        #{paramValues,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cll.mbg.model.TProductSkuExample" resultType="java.lang.Long">
+    select count(*) from t_product_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_product_sku
+    <set>
+      <if test="record.skuId != null">
+        sku_id = #{record.skuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.skuCode != null">
+        sku_code = #{record.skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null">
+        prod_id = #{record.prodId,jdbcType=INTEGER},
+      </if>
+      <if test="record.picUrl != null">
+        pic_url = #{record.picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalPrice != null">
+        original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.separatePrice != null">
+        separate_price = #{record.separatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.groupPrice != null">
+        group_price = #{record.groupPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stock != null">
+        stock = #{record.stock,jdbcType=INTEGER},
+      </if>
+      <if test="record.lowStock != null">
+        low_stock = #{record.lowStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.sales != null">
+        sales = #{record.sales,jdbcType=INTEGER},
+      </if>
+      <if test="record.specValues != null">
+        spec_values = #{record.specValues,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.paramValues != null">
+        param_values = #{record.paramValues,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_product_sku
+    set sku_id = #{record.skuId,jdbcType=INTEGER},
+      sku_code = #{record.skuCode,jdbcType=VARCHAR},
+      prod_id = #{record.prodId,jdbcType=INTEGER},
+      pic_url = #{record.picUrl,jdbcType=VARCHAR},
+      original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      separate_price = #{record.separatePrice,jdbcType=DECIMAL},
+      group_price = #{record.groupPrice,jdbcType=DECIMAL},
+      stock = #{record.stock,jdbcType=INTEGER},
+      low_stock = #{record.lowStock,jdbcType=INTEGER},
+      sales = #{record.sales,jdbcType=INTEGER},
+      spec_values = #{record.specValues,jdbcType=LONGVARCHAR},
+      param_values = #{record.paramValues,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_product_sku
+    set sku_id = #{record.skuId,jdbcType=INTEGER},
+      sku_code = #{record.skuCode,jdbcType=VARCHAR},
+      prod_id = #{record.prodId,jdbcType=INTEGER},
+      pic_url = #{record.picUrl,jdbcType=VARCHAR},
+      original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      separate_price = #{record.separatePrice,jdbcType=DECIMAL},
+      group_price = #{record.groupPrice,jdbcType=DECIMAL},
+      stock = #{record.stock,jdbcType=INTEGER},
+      low_stock = #{record.lowStock,jdbcType=INTEGER},
+      sales = #{record.sales,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cll.mbg.model.TProductSku">
+    update t_product_sku
+    <set>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        prod_id = #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null">
+        original_price = #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="separatePrice != null">
+        separate_price = #{separatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="groupPrice != null">
+        group_price = #{groupPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null">
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="lowStock != null">
+        low_stock = #{lowStock,jdbcType=INTEGER},
+      </if>
+      <if test="sales != null">
+        sales = #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="specValues != null">
+        spec_values = #{specValues,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="paramValues != null">
+        param_values = #{paramValues,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cll.mbg.model.TProductSku">
+    update t_product_sku
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      prod_id = #{prodId,jdbcType=INTEGER},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      separate_price = #{separatePrice,jdbcType=DECIMAL},
+      group_price = #{groupPrice,jdbcType=DECIMAL},
+      stock = #{stock,jdbcType=INTEGER},
+      low_stock = #{lowStock,jdbcType=INTEGER},
+      sales = #{sales,jdbcType=INTEGER},
+      spec_values = #{specValues,jdbcType=LONGVARCHAR},
+      param_values = #{paramValues,jdbcType=LONGVARCHAR}
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cll.mbg.model.TProductSku">
+    update t_product_sku
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      prod_id = #{prodId,jdbcType=INTEGER},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      separate_price = #{separatePrice,jdbcType=DECIMAL},
+      group_price = #{groupPrice,jdbcType=DECIMAL},
+      stock = #{stock,jdbcType=INTEGER},
+      low_stock = #{lowStock,jdbcType=INTEGER},
+      sales = #{sales,jdbcType=INTEGER}
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+</mapper>

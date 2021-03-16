@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cll.admin.mapper.ProductDao">
+
+    <select id="search" resultType="com.cll.admin.pojo.ProductAndCategory">
+        select p.prod_id ,p.title , p.main_pic , p.original_price , p.separate_price,p.cate_id,
+               p.group_price,p.sales,p.racking ,c.cate_name
+        from t_product p left join t_product_category c
+        on p.cate_id = c.cate_id
+        where
+        is_delete = 0
+        <if test="title != '' and title != null">
+            AND p.title like concat('%',#{title},'%')
+        </if>
+        <if test="cateId != null and cateId != 0">
+            and p.cate_id = #{cateId}
+        </if>
+        <if test="racking != null and racking != -1">
+            and p.racking = #{racking}
+        </if>
+        ORDER by p.prod_id
+    </select>
+    <select id="countByConditions" resultType="long">
+        SELECT count(*) from
+            (
+                select prod_id from t_product
+        where
+        is_delete = 0
+        <if test="title != '' and title != null">
+            AND title like concat('%',#{title},'%')
+        </if>
+        <if test="cateId != null and cateId != 0">
+            and cate_id = #{cateId}
+        </if>
+        <if test="racking != null and racking != -1">
+            and racking = #{racking}
+        </if>
+                GROUP BY prod_id
+            ) a
+    </select>
+
+</mapper>

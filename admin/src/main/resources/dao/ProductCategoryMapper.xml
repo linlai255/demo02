@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cll.admin.mapper.ProductCategoryDao">
+
+    <select id="getCategory" resultType="com.cll.mbg.model.TProductCategory">
+        select * from t_product_category where
+            1 = 1
+        <if test="cateName != null and cateName != ''">
+            and cate_name like concat('%',#{cateName},'%')
+        </if>
+    </select>
+    <select id="getCategoryBypId" resultType="com.cll.mbg.model.TProductCategory">
+        select * from t_product_category where
+        1 = 1
+        <if test="pCateId != null ">
+            and p_cate_id = #{pCateId}
+        </if>
+    </select>
+
+</mapper>
