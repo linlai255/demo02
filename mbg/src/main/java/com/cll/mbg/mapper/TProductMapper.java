@@ -13,14 +13,7 @@ public interface TProductMapper {
     int deleteByPrimaryKey(Integer prodId);
 
     int insert(TProduct record);
-
-    /**
-     * 自定义save方法，可添加商品后保存商品id
-     * @param record
-     * @return
-     */
     int save(TProduct record);
-
     int insertSelective(TProduct record);
 
     List<TProduct> selectByExampleWithBLOBs(TProductExample example);

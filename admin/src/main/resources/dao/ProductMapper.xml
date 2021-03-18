@@ -42,4 +42,10 @@
         select prod_id , title , original_price , separate_price , group_price , sales from
         t_product where prod_id = #{prodId}
     </select>
+    <select id="getSku" resultType="String">
+        select param_values from t_product_sku where prod_id = #{prodId}
+    </select>
+    <select id="getQA" resultType="com.cll.mbg.model.TProductQuestion">
+        select * from t_product_question where prod_id = #{prodId} order by create_time DESC
+    </select>
 </mapper>

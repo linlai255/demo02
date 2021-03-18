@@ -143,7 +143,7 @@
       #{keywords,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, #{services,jdbcType=VARCHAR}, 
       #{detail,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="save" parameterType="com.cll.mbg.model.TProduct" useGeneratedKeys="true" keyProperty="prodId">
+  <insert id="save" parameterType="com.cll.mbg.model.TProduct" keyProperty="prodId" useGeneratedKeys="true" >
     insert into t_product (prod_id, title, sales,
                            main_pic, original_price, separate_price,
                            group_price, racking, cate_id,

@@ -1,5 +1,6 @@
 package com.cll.admin.controller;
 
+import com.cll.admin.pojo.MyCategory;
 import com.cll.admin.pojo.MyProduct;
 import com.cll.admin.pojo.MySku;
 import com.cll.admin.pojo.Page;
@@ -66,7 +67,7 @@ public class ProductController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/productDerail" , method = RequestMethod.GET)
+    @RequestMapping(value = "/productDetail" , method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "商品详情")
     public CommonResult<VoProductDetail> ProductDerail(@RequestParam (required=true)Integer id){
@@ -76,7 +77,23 @@ public class ProductController {
         }
         else return CommonResult.failed("执行失败");
     }
-
+    @RequestMapping(value = "/getProductParams" , method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "商品参数")
+    public CommonResult<List<String>> getProductParams(@RequestParam (required=true)Integer prodId){
+        List<String> re = tProductService.getProductParams(prodId);
+        if (re == null){return CommonResult.failed("商品不存在");}
+        else return CommonResult.success("成功",re);
+    }
+    @RequestMapping(value = "/getProductQA" , method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "商品答疑信息")
+    public CommonResult<List<TProductQuestion>> getProductQA(@RequestParam (required=true)Integer prodId,
+                                                             @RequestParam( required = false ,defaultValue = "10") int size){
+        List<TProductQuestion> list = tProductService.getProductQA(prodId,size);
+        if (list == null)return CommonResult.failed("用户不存在");
+        else return CommonResult.success("成功",list);
+    }
     /**
      * 根据id删除商品
      * @param prodId
@@ -135,8 +152,8 @@ public class ProductController {
     @RequestMapping(value = "/categorySearch" , method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "根据关键字获取分类")
-    public CommonResult<List<TProductCategory>> categorySearch(String cateName){
-        List<TProductCategory> lists = tProductService.categorySearch(cateName);
+    public CommonResult<List<MyCategory> >categorySearch(String cateName){
+        List<MyCategory> lists = tProductService.categorySearch(cateName);
         return CommonResult.success("成功",lists);
     }
 

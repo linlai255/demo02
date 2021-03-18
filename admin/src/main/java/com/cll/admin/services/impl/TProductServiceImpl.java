@@ -8,10 +8,7 @@ import com.cll.admin.services.TProductService;
 import com.cll.admin.utils.MyTOProductUtil;
 import com.cll.admin.vo.AddProduct;
 import com.cll.admin.vo.VoProductDetail;
-import com.cll.mbg.mapper.TProductCategoryMapper;
-import com.cll.mbg.mapper.TProductImgMapper;
-import com.cll.mbg.mapper.TProductMapper;
-import com.cll.mbg.mapper.TProductSkuMapper;
+import com.cll.mbg.mapper.*;
 import com.cll.mbg.model.*;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,8 @@ public class TProductServiceImpl implements TProductService {
     TProductSkuMapper tProductSkuMapper;
     @Autowired
     ProductSkuDao productSkuDao;
+    @Autowired
+    TProductQuestionMapper tProductQuestionMapper;
     @Override
     public Page search(String title, Integer cateId, Integer racking, Integer pageNum, Integer pageSize) {
         Page page = new Page();
@@ -116,10 +115,11 @@ public class TProductServiceImpl implements TProductService {
     }
 
     @Override
-    public List<TProductCategory> categorySearch(String cateName) {
+    public List<MyCategory> categorySearch(String cateName) {
         List<TProductCategory> list = productCategoryDao.getCategory(cateName);
         if(cateName == null){
-            return list;
+            List<MyCategory> collate = collate(list);
+            return collate;
         }
         int maxLevel = 10;
         List<Integer> list1 = new ArrayList<>();
@@ -154,7 +154,8 @@ public class TProductServiceImpl implements TProductService {
                     result.addAll(categoryBypId1);
                 }
             }
-            return result;
+            List<MyCategory> collate = collate(result);
+            return collate;
         }
         if (maxLevel == 2){
             result.addAll(list2);
@@ -173,7 +174,8 @@ public class TProductServiceImpl implements TProductService {
                 TProductCategory tProductCategory = tProductCategoryMapper.selectByPrimaryKey(temp.get(i));
                 result.add(tProductCategory);
             }
-            return result;
+            List<MyCategory> collate = collate(result);
+            return collate;
         }
         if (maxLevel == 3){
             result.addAll(list2);
@@ -201,11 +203,39 @@ public class TProductServiceImpl implements TProductService {
                 TProductCategory tProductCategory = tProductCategoryMapper.selectByPrimaryKey(temp1.get(i));
                 result.add(tProductCategory);
             }
-            return result;
+            List<MyCategory> collate = collate(result);
+            return collate;
         }
-        return list;
-    }
 
+        return null;
+    }
+    public List<MyCategory> collate (List<TProductCategory> list){
+        List<MyCategory> myCategoryList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getCateLevel() == 1){
+                myCategoryList.add(new MyCategory(list.get(i), new ArrayList<SecondCategory>()));
+            }
+        }
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < myCategoryList.size(); j++) {
+                if (list.get(i).getCateLevel() == 2&&
+                        list.get(i).getpCateId() == myCategoryList.get(j).gettProductCategoryFirst().
+                                getCateId() ){
+                    myCategoryList.get(j).getSecondCategoryList().add(new SecondCategory(list.get(i) , new ArrayList<TProductCategory>()));
+                }
+            }
+        }
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < myCategoryList.size(); j++) {
+                for (int k = 0; k < myCategoryList.get(j).getSecondCategoryList().size(); k++) {
+                    if (list.get(i).getCateLevel() == 3&&list.get(i).getpCateId() == myCategoryList.get(j).getSecondCategoryList().get(k).gettProductCategorySecond().getCateId()){
+                        myCategoryList.get(j).getSecondCategoryList().get(k).getThirdCategoryList().add(list.get(i));
+                    }
+                }
+            }
+        }
+return myCategoryList;
+    }
     @Override
     public int addSubclass(Integer pCateId, String cateName, Integer cateLevel) {
        TProductCategory tProductCategory = new TProductCategory();
@@ -263,5 +293,24 @@ public class TProductServiceImpl implements TProductService {
         return 0;
     }
 
+    @Override
+    public List<String> getProductParams(Integer prodId) {
+       TProductSkuExample example = new TProductSkuExample();
+       example.createCriteria().andProdIdEqualTo(prodId);
+        List<String> sku = productDao.getSku(prodId);
+        System.out.println(sku.get(0));
+        System.out.println(sku.get(1));
+        return sku;
+    }
+
+    @Override
+    public List<TProductQuestion> getProductQA(Integer prodId, int size) {
+        TProductQuestionExample example = new TProductQuestionExample();
+        example.createCriteria().andProdIdEqualTo(prodId);
+        example.setOrderByClause("create_time  DESC");
+        PageHelper.startPage(1,size);
+        List<TProductQuestion> list = tProductQuestionMapper.selectByExample(example);
+        return list;
+    }
 
 }

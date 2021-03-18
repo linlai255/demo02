@@ -1,10 +1,10 @@
 package com.cll.admin.services;
 
+import com.cll.admin.pojo.MyCategory;
 import com.cll.admin.pojo.Page;
 import com.cll.admin.vo.AddProduct;
 import com.cll.admin.vo.VoProductDetail;
-import com.cll.mbg.model.TProduct;
-import com.cll.mbg.model.TProductCategory;
+import com.cll.mbg.model.TProductQuestion;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +19,7 @@ public interface TProductService {
 
     Integer updateProduct(int prodId, String title, Integer cateId, BigDecimal originalPrice, BigDecimal separatePrice, BigDecimal groupPrice, Integer racking);
 
-    List<TProductCategory> categorySearch(String cateName);
+    List<MyCategory> categorySearch(String cateName);
 
     int addSubclass(Integer pCateId, String cateName,Integer cateLevel);
 
@@ -27,4 +27,7 @@ public interface TProductService {
 
     int addProduct(AddProduct addProduct , String url);
 
+    List<String> getProductParams(Integer prodId);
+
+    List<TProductQuestion> getProductQA(Integer prodId ,int size);
 }
